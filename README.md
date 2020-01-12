@@ -1,2 +1,2 @@
 ```
-1. npm modules
+1. npm install

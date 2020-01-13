@@ -23,6 +23,7 @@ app.use(require('morgan')('dev'));
 app.use(require('cors')());
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
+app.use('/uploads', express.static('uploads'));
 app.use('/api/auth',authRoutes);
 app.use('/api/analytics',analyticsRoutes);
 app.use('/api/category',categoryRoutes);

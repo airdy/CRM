@@ -9,7 +9,7 @@ module.exports.getAll = async (req, res) => {
     } catch (e) {
     errorHandler(res,e)
     }
-}
+};
 module.exports.getById = async (req, res) => {
     try{
         const category = await Category.findById(req.params.id);
@@ -17,7 +17,7 @@ module.exports.getById = async (req, res) => {
     } catch (e) {
         errorHandler(res,e)
     }
-}
+};
 module.exports.delete = async (req, res) => {
     try{
     await Category.remove({_id: req.params.id});
@@ -28,18 +28,36 @@ module.exports.delete = async (req, res) => {
     } catch (e) {
         errorHandler(res,e)
     }
-}
-module.exports.create = (req, res) => {
-    try{
+};
+module.exports.create = async (req, res) => {
+    const category = new Category({
+        name: req.body.name,
+        user: req.user.id,
+        imageSrc: req.file ? req.file.path : ''
+    });
 
+    try{
+    await category.save()
+        res.status(201).json(category)
     } catch (e) {
         errorHandler(res,e)
     }
-}
-module.exports.update = (req, res) => {
+};
+module.exports.update = async (req, res) => {
+    const updated = {
+        name: req.body.name
+    };
+    if (req.file) {
+        updated.imageSrc = req.file.path
+    }
     try{
-
+    const category = await Category.findOneAndUpdate(
+        {_id: req.params.id},
+        {$set: updated},
+        {new: true}
+    );
+        res.status(200).json(category)
     } catch (e) {
         errorHandler(res,e)
     }
-}
+};
